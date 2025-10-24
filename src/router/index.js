@@ -5,6 +5,12 @@ const routes = [
         path: '/',
         name: 'Home',
         component: () => import('../views/HomeView.vue')
+    },
+    {
+        path: '/genre/:genre',
+        name: 'GenreView',
+        component: () => import('../views/GenreView.vue'),
+        props: true
     }
 ];
 
