@@ -7,6 +7,12 @@ const routes = [
         component: () => import('../views/HomeView.vue')
     },
     {
+        path: '/show/:id',
+        name: 'ShowDetail',
+        component: () => import('../views/ShowDetailView.vue'),
+        props: true
+    },
+    {
         path: '/genre/:genre',
         name: 'GenreView',
         component: () => import('../views/GenreView.vue'),

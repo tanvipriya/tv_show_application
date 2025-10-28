@@ -5,12 +5,20 @@
       <router-link
         :to="{ name: 'GenreView', params: { genre } }"
         class="see-all"
-        >See All</router-link
       >
+        See All
+      </router-link>
     </div>
 
     <div class="carousel-container">
-      <ShowCard v-for="show in shows" :key="show.id" :show="show" />
+      <router-link
+        v-for="show in shows"
+        :key="show.id"
+        :to="{ name: 'ShowDetail', params: { id: show.id } }"
+        class="show-link"
+      >
+        <ShowCard :show="show" />
+      </router-link>
     </div>
 
     <p v-if="loading">Loading...</p>
@@ -23,21 +31,21 @@ import { onMounted, computed } from "vue";
 import { useShowsStore } from "@/store/showsStore";
 import ShowCard from "./ShowCard.vue";
 
-// Correctly define props
 const props = defineProps({
   genre: String,
 });
 
 const store = useShowsStore();
-console.log("props.genre", store.showsByGenre[props.genre]);
-// Use props.genre instead of just genre
+
+// Compute shows for this genre
 const shows = computed(() => store.showsByGenre[props.genre] || []);
 const loading = computed(() => store.loading);
 const error = computed(() => store.error);
 
-onMounted(() => {
+onMounted(async () => {
+  // Load first batch if not loaded yet
   if (!store.showsByGenre[props.genre]) {
-    store.fetchShowsByGenre(props.genre);
+    await store.fetchNextPage(props.genre); // <--- updated function
   }
 });
 </script>
@@ -46,12 +54,14 @@ onMounted(() => {
 .genre-carousel {
   margin-bottom: 24px;
 }
+
 .carousel-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
 }
+
 .carousel-container {
   display: flex;
   overflow-x: auto;
@@ -59,18 +69,27 @@ onMounted(() => {
   gap: 12px;
   padding-bottom: 8px;
 }
+
 .carousel-container::-webkit-scrollbar {
   height: 8px;
 }
+
 .carousel-container::-webkit-scrollbar-thumb {
   background: #888;
   border-radius: 4px;
 }
+
+.show-link {
+  text-decoration: none;
+  color: inherit;
+}
+
 .see-all {
   font-size: 0.85rem;
-  color: #1e90ff;
+  color: #004c4d;
   text-decoration: none;
 }
+
 .error {
   color: red;
 }
