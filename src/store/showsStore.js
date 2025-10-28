@@ -3,36 +3,50 @@ import axios from 'axios';
 
 export const useShowsStore = defineStore('shows', {
     state: () => ({
-        showsByGenre: {}, // { drama: [...], comedy: [...] }
+        showsByGenre: {},         // { genreName: [shows] }
+        pagesLoaded: {},          // { genreName: number of pages loaded }
         loading: false,
         error: null
     }),
     actions: {
-        async fetchShowsByGenre(genre) {
+        /**
+         * Fetch shows by genre dynamically using API pages.
+         * @param {string} genre
+         * @param {number} page - TVMaze API page number
+         */
+        async fetchShowsByGenrePage(genre, page = 0) {
             this.loading = true;
             this.error = null;
-            try {
-                // Fetch first 2 pages (TVMaze has 250 shows per page)
-                const pages = [0, 1];
-                let allShows = [];
 
-                for (const page of pages) {
-                    const res = await axios.get(`https://api.tvmaze.com/shows?page=${page}`);
-                    allShows = allShows.concat(res.data);
+            try {
+                const res = await axios.get(`https://api.tvmaze.com/shows?page=${page}`);
+                const shows = res.data;
+
+                // Filter shows by genre
+                const filtered = shows.filter((show) => show.genres.includes(genre));
+
+                // Initialize array if not exists
+                if (!this.showsByGenre[genre]) {
+                    this.showsByGenre[genre] = [];
+                    this.pagesLoaded[genre] = 0;
                 }
 
-                // Filter by genre
-                const filtered = allShows.filter((show) => show.genres.includes(genre));
-
-                // Sort by rating descending (null rating goes last)
-                filtered.sort((a, b) => (b.rating.average || 0) - (a.rating.average || 0));
-
-                this.showsByGenre[genre] = filtered;
+                // Append new shows
+                this.showsByGenre[genre].push(...filtered);
+                this.pagesLoaded[genre] = page;
             } catch (err) {
                 this.error = err.message || 'Failed to fetch shows';
             } finally {
                 this.loading = false;
             }
+        },
+
+        /**
+         * Load next batch for infinite scroll.
+         */
+        async fetchNextPage(genre) {
+            const nextPage = this.pagesLoaded[genre] !== undefined ? this.pagesLoaded[genre] + 1 : 0;
+            await this.fetchShowsByGenrePage(genre, nextPage);
         }
     }
 });
