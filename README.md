@@ -246,24 +246,20 @@ npm run build-storybook
 ### Demo
 
 **Home View**
-
-
-
-https://github.com/user-attachments/assets/64937823-8f79-46cf-9732-7fc52923be96
+https://github.com/user-attachments/assets/275e96a3-6fa4-4fd9-83d6-c89ac16dc9cb
 
 **ShowDetailView**
 
+https://github.com/user-attachments/assets/0bac9bd3-f15b-48b3-ae93-8fe12ba03b04
 
-https://github.com/user-attachments/assets/44563467-192d-4f51-be46-fb5355b3a733
+
+**ShowDetailView Sort and Filter Episode**
+
+https://github.com/user-attachments/assets/9bc6aaae-1353-4a77-a669-469ba4831107
 
 **SearchResultsView**
 
-
-https://github.com/user-attachments/assets/ff7375c9-c846-4aae-9158-b21bc15dd980
-
-
-
-
+https://github.com/user-attachments/assets/99c8dd3e-a008-4b6a-8d5a-6a7f4429756d
 
 ---
 ##  Author
