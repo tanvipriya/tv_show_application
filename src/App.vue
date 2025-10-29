@@ -3,8 +3,6 @@
     <!-- Header -->
     <header class="app-header">
       <h1 class="app-title">TV Shows Dashboard</h1>
-      <router-link to="/" class="home-link">Home</router-link>
-      <router-link to="/search" class="search-link">Search</router-link>
     </header>
 
     <!-- Main content -->
@@ -46,9 +44,22 @@
 }
 
 .app-header a {
+  display: flex;
+  align-items: center;
   color: #fff;
   text-decoration: none;
   margin-left: 16px;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.app-header a:hover {
+  color: #ffd700;
+}
+
+.app-header a i {
+  margin-right: 8px; /* space between icon and text */
+  font-size: 1.1rem;
 }
 
 .app-main {
