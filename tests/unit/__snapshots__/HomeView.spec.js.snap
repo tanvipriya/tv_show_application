@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HomeView.vue renders correctly and matches snapshot 1`] = `
+<div>
+  <h1 class="search-title"><i class="fas fa-tv"></i> TV Shows Dashboard</h1>
+  <p class="search-subtitle">Find your favorite shows quickly</p><!-- Search input -->
+  <search-results-view-stub modelvalue=""></search-results-view-stub><!-- Search results -->
+  <!--v-if-->
+  <!-- Genre carousels (hide if searchQuery is not empty) -->
+  <div>
+    <genre-carousel-stub genre="Drama"></genre-carousel-stub>
+    <genre-carousel-stub genre="Comedy"></genre-carousel-stub>
+    <genre-carousel-stub genre="Action"></genre-carousel-stub>
+    <genre-carousel-stub genre="Sports"></genre-carousel-stub>
+    <genre-carousel-stub genre="Horror"></genre-carousel-stub>
+  </div>
+</div>
+`;

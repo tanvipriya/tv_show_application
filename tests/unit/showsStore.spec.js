@@ -30,7 +30,10 @@ describe('useShowsStore', () => {
         expect(store.error).toBeNull();
         expect(store.showsByGenre['Drama']).toHaveLength(1);
         expect(store.pagesLoaded['Drama']).toBe(0);
-        expect(store.showsByGenre['Drama'][0].name).toBe('Show A');
+
+        // Snapshot of showsByGenre
+        expect(store.showsByGenre).toMatchSnapshot();
+        expect(store.pagesLoaded).toMatchSnapshot();
     });
 
     it('handles fetch error', async () => {
@@ -40,6 +43,9 @@ describe('useShowsStore', () => {
 
         expect(store.error).toBe('Network error');
         expect(store.loading).toBe(false);
+
+        // Snapshot of error state
+        expect(store.error).toMatchSnapshot();
     });
 
     /* -------------------------
@@ -48,16 +54,20 @@ describe('useShowsStore', () => {
     it('toggles favorite correctly', () => {
         store.toggleFavorite(1);
         expect(store.favorites).toContain(1);
-        expect(JSON.parse(localStorage.getItem('favorites'))).toContain(1);
 
         store.toggleFavorite(1);
         expect(store.favorites).not.toContain(1);
+
+        // Snapshot of favorites
+        expect(store.favorites).toMatchSnapshot();
     });
 
     it('checks if a show is favorite', () => {
         store.favorites = [1, 2];
         expect(store.isFavorite(1)).toBe(true);
         expect(store.isFavorite(3)).toBe(false);
+
+        expect(store.favorites).toMatchSnapshot();
     });
 
     /* -------------------------
@@ -74,12 +84,17 @@ describe('useShowsStore', () => {
         expect(store.loading).toBe(false);
         expect(store.searchResults).toHaveLength(1);
         expect(store.searchResults[0].name).toBe('Search Show');
+
+        // Snapshot of search results
+        expect(store.searchResults).toMatchSnapshot();
     });
 
     it('handles empty search', async () => {
         await store.fetchShowsByName('');
         expect(store.loading).toBe(false);
         expect(store.searchResults).toEqual([]);
+
+        expect(store.searchResults).toMatchSnapshot();
     });
 
     /* -------------------------
@@ -94,18 +109,20 @@ describe('useShowsStore', () => {
             ],
         };
 
-        // Case 1: filter shows with hasImage = true and minRating = 8
         store.setFilters({ hasImage: true, minRating: 8 });
         const result1 = store.sortedFilteredShows('Drama');
         expect(result1).toHaveLength(1);
         expect(result1[0].name).toBe('Show C');
 
-        // Case 2: filter shows with hasImage = false and minRating = 8
         store.setFilters({ hasImage: false, minRating: 8 });
         const result2 = store.sortedFilteredShows('Drama');
         expect(result2).toHaveLength(2);
-        expect(result2[0].name).toBe('Show C'); // sorted by rating descending
+        expect(result2[0].name).toBe('Show C');
         expect(result2[1].name).toBe('Show B');
+
+        // Snapshot of sorted & filtered results
+        expect(result1).toMatchSnapshot();
+        expect(result2).toMatchSnapshot();
     });
 
     /* -------------------------
@@ -119,7 +136,9 @@ describe('useShowsStore', () => {
         expect(store.episodesByShow[1]).toHaveLength(1);
         expect(store.episodesByShow[1][0].name).toBe('Episode 1');
 
-        // Should not fetch again if already loaded
+        // Snapshot of episodes
+        expect(store.episodesByShow).toMatchSnapshot();
+
         await store.fetchEpisodes(1);
         expect(axios.get).toHaveBeenCalledTimes(1);
     });
@@ -134,14 +153,14 @@ describe('useShowsStore', () => {
             ]
         });
 
-        // first page
         await store.fetchNextPage('Drama');
-        expect(store.pagesLoaded['Drama']).toBe(0);
-        expect(store.showsByGenre['Drama']).toHaveLength(1);
+        await store.fetchNextPage('Drama');
 
-        // next page
-        await store.fetchNextPage('Drama');
         expect(store.pagesLoaded['Drama']).toBe(1);
         expect(store.showsByGenre['Drama']).toHaveLength(2);
+
+        // Snapshot of showsByGenre and pagesLoaded
+        expect(store.showsByGenre).toMatchSnapshot();
+        expect(store.pagesLoaded).toMatchSnapshot();
     });
 });

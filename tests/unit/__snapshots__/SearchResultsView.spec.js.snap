@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SearchView.vue matches snapshot 1`] = `<div class="search-view"><input type="text" placeholder="Search TV shows..." class="search-input"></div>`;

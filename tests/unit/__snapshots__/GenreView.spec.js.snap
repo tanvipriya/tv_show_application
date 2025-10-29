@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GenreView.vue - stable coverage with snapshot renders show cards and navigates to ShowDetail on click 1`] = `
+<div class="genre-view">
+  <!-- Back Button --><button class="back-btn">← Back to Dashboard</button>
+  <h1>Drama Shows</h1>
+  <div class="shows-grid"><a href="/show/1" class="show-link">
+      <div class="show-card">
+        <!--v-if-->
+        <div class="details">
+          <h3>Show One</h3>
+          <p>⭐ N/A</p>
+          <p>—</p>
+        </div>
+      </div>
+    </a><a href="/show/2" class="show-link">
+      <div class="show-card">
+        <!--v-if-->
+        <div class="details">
+          <h3>Show Two</h3>
+          <p>⭐ N/A</p>
+          <p>—</p>
+        </div>
+      </div>
+    </a></div>
+  <!--v-if-->
+  <!--v-if-->
+</div>
+`;

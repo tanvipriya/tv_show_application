@@ -2,11 +2,7 @@ import path from 'path';
 
 export default {
   stories: ['../src/**/*.stories.@(js|ts|vue|mdx)'],
-  addons: [
-    '@storybook/addon-links',
-    '@storybook/addon-essentials',
-    '@storybook/addon-interactions'
-  ],
+  addons: ['@storybook/addon-links', "@storybook/addon-docs"],
   framework: {
     name: '@storybook/vue3-vite',
     options: {},

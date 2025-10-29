@@ -2,7 +2,7 @@ import { createRouter, createMemoryHistory } from "vue-router";
 import { mount } from "@vue/test-utils";
 import GenreView from "@/views/GenreView.vue";
 import ShowDetail from "@/views/ShowDetailView.vue";
-import ShowCard from "@/components/ShowCard.vue"; // ✅ Import ShowCard
+import ShowCard from "@/components/ShowCard.vue";
 import { createTestingPinia } from "@pinia/testing";
 import { useShowsStore } from "@/store/showsStore";
 
@@ -11,7 +11,7 @@ const mockShows = [
     { id: 2, name: "Show Two", rating: 9, image: "https://example.com/show2.jpg" },
 ];
 
-describe("GenreView.vue - stable coverage", () => {
+describe("GenreView.vue - stable coverage with snapshot", () => {
     let router;
     let pushSpy;
     let pinia;
@@ -22,7 +22,7 @@ describe("GenreView.vue - stable coverage", () => {
             history: createMemoryHistory(),
             routes: [
                 { path: "/", name: "Home", component: { template: "<div />" } },
-                { path: "/genre/:genre", name: "GenreView", component: GenreView }, // ✅ Add genre route
+                { path: "/genre/:genre", name: "GenreView", component: GenreView },
                 { name: "ShowDetail", path: "/show/:id", component: ShowDetail },
             ],
         });
@@ -44,21 +44,24 @@ describe("GenreView.vue - stable coverage", () => {
             global: {
                 plugins: [pinia, router],
                 components: { ShowCard },
-                mocks: {
-                    hasMore: false, // mock the missing property
-                },
+                mocks: { hasMore: false },
             },
         });
 
         await wrapper.vm.$nextTick();
 
-        const cards = wrapper.findAllComponents(ShowCard); // count real show cards
+        // Check correct number of show cards
+        const cards = wrapper.findAllComponents(ShowCard);
         expect(cards.length).toBe(mockShows.length);
 
+        // Trigger navigation on first card click
         await cards[0].trigger("click");
         expect(pushSpy).toHaveBeenCalledWith({
             name: "ShowDetail",
             params: { id: 1 },
         });
+
+        // --- Snapshot Test ---
+        expect(wrapper.html()).toMatchSnapshot();
     });
 });
