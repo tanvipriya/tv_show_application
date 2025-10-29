@@ -36,7 +36,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 16px 24px;
-  background-color: #1e1e2f;
+  background-color: #004c4d;
   color: #fff;
 }
 
@@ -60,7 +60,7 @@
 .app-footer {
   text-align: center;
   padding: 16px;
-  background-color: #1e1e2f;
+  background-color: #004c4d;
   color: #fff;
   font-size: 0.9rem;
 }
