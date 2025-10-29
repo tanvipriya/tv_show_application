@@ -1,0 +1,167 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GenreCarousel Component handles shows without rating gracefully: GenreCarousel - missing rating shows 1`] = `
+<div class="genre-carousel">
+  <div class="carousel-header">
+    <h2>Drama</h2>
+    <div to="[object Object]" class="see-all"> See All </div>
+  </div>
+  <div class="carousel-container">
+    <div to="[object Object]" class="show-link">
+      <div class="show-card">
+        <!--v-if-->
+        <div class="details">
+          <h3>Rated Show</h3>
+          <p>⭐ 5</p>
+          <p>—</p>
+        </div>
+      </div>
+    </div>
+    <div to="[object Object]" class="show-link">
+      <div class="show-card">
+        <!--v-if-->
+        <div class="details">
+          <h3>No Rating Show</h3>
+          <p>⭐ N/A</p>
+          <p>—</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--v-if-->
+  <!--v-if-->
+</div>
+`;
+
+exports[`GenreCarousel Component renders empty state correctly when no shows are available: GenreCarousel - empty state 1`] = `
+<div class="genre-carousel">
+  <div class="carousel-header">
+    <h2>Drama</h2>
+    <div to="[object Object]" class="see-all"> See All </div>
+  </div>
+  <div class="carousel-container">
+    <div class="empty"> No shows available </div>
+  </div>
+  <!--v-if-->
+  <!--v-if-->
+</div>
+`;
+
+exports[`GenreCarousel Component renders error state correctly: GenreCarousel - error state 1`] = `
+<div class="genre-carousel">
+  <div class="carousel-header">
+    <h2>Drama</h2>
+    <div to="[object Object]" class="see-all"> See All </div>
+  </div>
+  <div class="carousel-container">
+    <div to="[object Object]" class="show-link">
+      <div class="show-card">
+        <!--v-if-->
+        <div class="details">
+          <h3>Breaking Bad</h3>
+          <p>⭐ 9.5</p>
+          <p>—</p>
+        </div>
+      </div>
+    </div>
+    <div to="[object Object]" class="show-link">
+      <div class="show-card">
+        <!--v-if-->
+        <div class="details">
+          <h3>Game of Thrones</h3>
+          <p>⭐ 9.3</p>
+          <p>—</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--v-if-->
+  <p class="error">Failed to fetch shows</p>
+</div>
+`;
+
+exports[`GenreCarousel Component renders loading state correctly: GenreCarousel - loading state 1`] = `
+<div class="genre-carousel">
+  <div class="carousel-header">
+    <h2>Drama</h2>
+    <div to="[object Object]" class="see-all"> See All </div>
+  </div>
+  <div class="carousel-container">
+    <div class="skeleton-wrapper">
+      <div class="show-skeleton"></div>
+      <div class="show-skeleton"></div>
+      <div class="show-skeleton"></div>
+      <div class="show-skeleton"></div>
+      <div class="show-skeleton"></div>
+    </div>
+  </div>
+  <p>Loading...</p>
+  <!--v-if-->
+</div>
+`;
+
+exports[`GenreCarousel Component renders shows correctly and matches snapshot: GenreCarousel - normal shows 1`] = `
+<div class="genre-carousel">
+  <div class="carousel-header">
+    <h2>Drama</h2>
+    <div to="[object Object]" class="see-all"> See All </div>
+  </div>
+  <div class="carousel-container">
+    <div to="[object Object]" class="show-link">
+      <div class="show-card">
+        <!--v-if-->
+        <div class="details">
+          <h3>Breaking Bad</h3>
+          <p>⭐ 9.5</p>
+          <p>—</p>
+        </div>
+      </div>
+    </div>
+    <div to="[object Object]" class="show-link">
+      <div class="show-card">
+        <!--v-if-->
+        <div class="details">
+          <h3>Game of Thrones</h3>
+          <p>⭐ 9.3</p>
+          <p>—</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--v-if-->
+  <!--v-if-->
+</div>
+`;
+
+exports[`GenreCarousel Component sorts shows by rating descending: GenreCarousel - sorted shows 1`] = `
+<div class="genre-carousel">
+  <div class="carousel-header">
+    <h2>Drama</h2>
+    <div to="[object Object]" class="see-all"> See All </div>
+  </div>
+  <div class="carousel-container">
+    <div to="[object Object]" class="show-link">
+      <div class="show-card">
+        <!--v-if-->
+        <div class="details">
+          <h3>High Rated Show</h3>
+          <p>⭐ 9</p>
+          <p>—</p>
+        </div>
+      </div>
+    </div>
+    <div to="[object Object]" class="show-link">
+      <div class="show-card">
+        <!--v-if-->
+        <div class="details">
+          <h3>Low Rated Show</h3>
+          <p>⭐ 2</p>
+          <p>—</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--v-if-->
+  <!--v-if-->
+</div>
+`;

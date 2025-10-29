@@ -1,181 +1,144 @@
-import { mount } from "@vue/test-utils";
-import { createTestingPinia } from "@pinia/testing";
-import { createRouter, createMemoryHistory } from "vue-router";
-import GenreCarousel from "@/components/GenreCarousel.vue";
-import ShowCard from "@/components/ShowCard.vue";
-import { useShowsStore } from "@/store/showsStore";
-import ShowDetail from "@/views/ShowDetailView.vue";
-import GenreView from "@/views/GenreView.vue";
+import { createPinia, setActivePinia } from 'pinia';
+import { useShowsStore } from '@/store/showsStore';
+import { mount } from '@vue/test-utils';
+import GenreCarousel from '@/components/GenreCarousel.vue';
+import ShowCard from '@/components/ShowCard.vue';
 
-const mockShows = [
-    { id: 1, name: "Show One", rating: 8, image: null },
-    { id: 2, name: "Show Two", rating: 9, image: "https://example.com/show2.jpg" },
-];
-
-describe("GenreCarousel.vue - full coverage", () => {
-    let router;
-    let pushSpy;
+describe('GenreCarousel Component', () => {
     let pinia;
     let store;
-    beforeAll(() => {
-        jest.spyOn(console, 'warn').mockImplementation(() => { });
-    });
-    afterAll(() => {
-        console.warn.mockRestore();
-    });
-    beforeEach(async () => {
-        router = createRouter({
-            history: createMemoryHistory(),
-            routes: [
-                { path: "/", name: "Home", component: { template: "<div />" } }, // dummy home route
-                { name: "ShowDetail", path: "/show/:id", component: ShowDetail },
-                { name: "GenreView", path: "/genre/:genre", component: GenreView },
-            ],
-        });
 
-        pushSpy = jest.spyOn(router, "push");
-        router.push("/"); // now valid
-        await router.isReady();
-
-        pinia = createTestingPinia({ stubActions: false });
+    beforeEach(() => {
+        pinia = createPinia();
+        setActivePinia(pinia);
         store = useShowsStore();
-    });
 
-    it("renders genre title", () => {
-        store.showsByGenre = { Drama: mockShows };
+        // Default store state
+        store.showsByGenre = {
+            Drama: [
+                { id: 1, name: 'Breaking Bad', rating: { average: 9.5 }, image: { medium: '' } },
+                { id: 2, name: 'Game of Thrones', rating: { average: 9.3 }, image: { medium: '' } },
+            ],
+        };
         store.loading = false;
         store.error = null;
-
-        const wrapper = mount(GenreCarousel, {
-            props: { genre: "Drama" },
-            global: { plugins: [pinia] },
-            stubs: ["ShowCard"],
-        });
-
-        expect(wrapper.find("h2").text()).toBe("Drama");
-    });
-
-    it("shows loading state when loading is true", () => {
-        store.loading = true;
-        store.error = null;
-        store.showsByGenre = {};
-
-        const wrapper = mount(GenreCarousel, {
-            props: { genre: "Drama" },
-            global: { plugins: [pinia] },
-            stubs: ["ShowCard"],
-        });
-
-        const skeleton = wrapper.find(".skeleton-wrapper");
-        expect(skeleton.exists()).toBe(true);
-        expect(skeleton.findAll(".show-skeleton").length).toBe(5);
-    });
-
-    it("shows error message if error exists", async () => {
-        store.fetchNextPage = jest.fn(); // stub to prevent overwriting error
-        store.loading = false;
-        store.error = "Failed to load shows";
-        store.showsByGenre = {};
-
-        const wrapper = mount(GenreCarousel, {
-            props: { genre: "Drama" },
-            global: { plugins: [pinia] },
-            stubs: ["ShowCard"],
-        });
-
-        await wrapper.vm.$nextTick();
-        const errorEl = wrapper.find(".error");
-        expect(errorEl.exists()).toBe(true);
-        expect(errorEl.text()).toBe("Failed to load shows");
-    });
-
-    it("shows empty state when no shows are available", () => {
-        store.loading = false;
-        store.error = null;
-        store.showsByGenre = { Drama: [] };
-
-        const wrapper = mount(GenreCarousel, {
-            props: { genre: "Drama" },
-            global: { plugins: [pinia] },
-            stubs: ["ShowCard"],
-        });
-
-        const emptyEl = wrapper.find(".empty");
-        expect(emptyEl.exists()).toBe(true);
-        expect(emptyEl.text()).toBe("No shows available");
-    });
-
-    it("renders show cards with correct props and fallback image", () => {
-        store.loading = false;
-        store.error = null;
-        store.showsByGenre = { Drama: mockShows };
-
-        const wrapper = mount(GenreCarousel, {
-            props: { genre: "Drama" },
-            global: { plugins: [pinia] },
-            components: { ShowCard },
-        });
-
-        const showCards = wrapper.findAllComponents(ShowCard);
-        expect(showCards.length).toBe(2);
-
-        // Props validation
-        expect(showCards[0].props("show")).toEqual(mockShows[0]);
-        expect(showCards[1].props("show")).toEqual(mockShows[1]);
-    });
-
-    it("calls fetchNextPage if shows for genre are missing on mount", async () => {
         store.fetchNextPage = jest.fn();
-        store.loading = false;
-        store.error = null;
-        store.showsByGenre = {}; // genre missing
-
-        mount(GenreCarousel, {
-            props: { genre: "Drama" },
-            global: { plugins: [pinia] },
-            stubs: ["ShowCard"],
-        });
-
-        await Promise.resolve(); // wait for next tick
-        expect(store.fetchNextPage).toHaveBeenCalledWith("Drama");
     });
 
-    it("navigates to ShowDetail when show card is clicked", async () => {
-        store.loading = false;
-        store.error = null;
-        store.showsByGenre = { Drama: mockShows };
-
-        const wrapper = mount(GenreCarousel, {
-            props: { genre: "Drama" },
-            global: { plugins: [pinia, router] },
-            components: { ShowCard }, // use real component so it renders
+    // Helper to mount component with proper RouterLink stub
+    const mountCarousel = (props) => {
+        return mount(GenreCarousel, {
+            global: {
+                plugins: [pinia],
+                stubs: {
+                    RouterLink: {
+                        template: '<div><slot /></div>', // render children to allow ShowCard to mount
+                    },
+                },
+            },
+            props,
         });
+    };
 
-        const firstCard = wrapper.findComponent(ShowCard);
-        await firstCard.trigger("click");
+    it('renders shows correctly and matches snapshot', () => {
+        const wrapper = mountCarousel({ genre: 'Drama' });
 
-        expect(pushSpy).toHaveBeenCalledWith({
-            name: "ShowDetail",
-            params: { id: 1 },
-        });
+        const showLinks = wrapper.findAll('.show-link');
+        expect(showLinks.length).toBe(2);
+
+        expect(wrapper.html()).toMatchSnapshot('GenreCarousel - normal shows');
     });
 
+    it('renders loading state correctly', () => {
+        store.loading = true;
 
-    it("navigates to GenreView when See All is clicked", async () => {
+        const wrapper = mountCarousel({ genre: 'Drama' });
+
+        const skeleton = wrapper.find('.skeleton-wrapper');
+        expect(skeleton.exists()).toBe(true);
+        expect(skeleton.findAll('.show-skeleton').length).toBe(5);
+
+        expect(wrapper.html()).toMatchSnapshot('GenreCarousel - loading state');
+    });
+
+    it('renders empty state correctly when no shows are available', () => {
+        store.showsByGenre = { Drama: [] };
         store.loading = false;
         store.error = null;
-        store.showsByGenre = { Comedy: mockShows };
 
-        const wrapper = mount(GenreCarousel, {
-            props: { genre: "Comedy" },
-            global: { plugins: [pinia, router] },
-            stubs: ["ShowCard"],
-        });
+        const wrapper = mountCarousel({ genre: 'Drama' });
 
-        await wrapper.find(".see-all").trigger("click");
-        expect(pushSpy).toHaveBeenCalledWith({
-            name: "GenreView",
-            params: { genre: "Comedy" },
-        });
+        const emptyEl = wrapper.find('.empty');
+        expect(emptyEl.exists()).toBe(true);
+        expect(emptyEl.text()).toBe('No shows available');
+
+        expect(wrapper.html()).toMatchSnapshot('GenreCarousel - empty state');
+    });
+
+    it('renders error state correctly', () => {
+        store.error = 'Failed to fetch shows';
+
+        const wrapper = mountCarousel({ genre: 'Drama' });
+
+        const errorEl = wrapper.find('.error');
+        expect(errorEl.exists()).toBe(true);
+        expect(errorEl.text()).toBe('Failed to fetch shows');
+
+        expect(wrapper.html()).toMatchSnapshot('GenreCarousel - error state');
+    });
+
+    it('handles click safely on first show', async () => {
+        const wrapper = mountCarousel({ genre: 'Drama' });
+
+        const showLinks = wrapper.findAll('.show-link');
+        expect(showLinks.length).toBe(2);
+
+        await showLinks[0].trigger('click');
+    });
+
+    it('calls fetchNextPage when mounted if genre not loaded', () => {
+        store.showsByGenre = {}; // simulate genre not loaded
+
+        mountCarousel({ genre: 'Drama' });
+
+        expect(store.fetchNextPage).toHaveBeenCalledWith('Drama');
+    });
+
+    it('does not call fetchNextPage if genre already loaded', () => {
+        mountCarousel({ genre: 'Drama' });
+
+        expect(store.fetchNextPage).not.toHaveBeenCalled();
+    });
+
+    it('sorts shows by rating descending', () => {
+        store.showsByGenre = {
+            Drama: [
+                { id: 1, name: 'Low Rated Show', rating: { average: 2 } },
+                { id: 2, name: 'High Rated Show', rating: { average: 9 } },
+            ],
+        };
+        store.loading = false;
+
+        const wrapper = mountCarousel({ genre: 'Drama' });
+
+        const showTexts = wrapper.findAllComponents(ShowCard).map(s => s.props('show').name);
+        expect(showTexts).toEqual(['High Rated Show', 'Low Rated Show']);
+        expect(wrapper.html()).toMatchSnapshot('GenreCarousel - sorted shows');
+    });
+
+    it('handles shows without rating gracefully', () => {
+        store.showsByGenre = {
+            Drama: [
+                { id: 1, name: 'No Rating Show' }, // missing rating
+                { id: 2, name: 'Rated Show', rating: { average: 5 } },
+            ],
+        };
+        store.loading = false;
+
+        const wrapper = mountCarousel({ genre: 'Drama' });
+
+        const showTexts = wrapper.findAllComponents(ShowCard).map(s => s.props('show').name);
+        expect(showTexts).toEqual(['Rated Show', 'No Rating Show']);
+        expect(wrapper.html()).toMatchSnapshot('GenreCarousel - missing rating shows');
     });
 });

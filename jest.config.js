@@ -22,8 +22,12 @@ module.exports = {
     "src/**/*.{js,vue}",
     "!src/main.js",
     "!src/router/**",
-    "!src/store/**",
+    "!src/stories/**",
     "!**/node_modules/**",
+  ],
+  coveragePathIgnorePatterns: [
+    "/node_modules/",
+    "<rootDir>/src/stories/"
   ],
   coverageReporters: ["html", "text-summary"],
   coverageDirectory: "<rootDir>/coverage",
@@ -36,3 +40,4 @@ module.exports = {
     },
   },
 };
+

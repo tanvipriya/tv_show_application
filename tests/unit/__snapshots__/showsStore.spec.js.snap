@@ -1,0 +1,131 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`useShowsStore checks if a show is favorite 1`] = `
+Array [
+  1,
+  2,
+]
+`;
+
+exports[`useShowsStore fetchNextPage increments page correctly 1`] = `
+Object {
+  "Drama": Array [
+    Object {
+      "genres": Array [
+        "Drama",
+      ],
+      "id": 1,
+      "image": Object {},
+      "name": "Show A",
+      "rating": Object {
+        "average": 8,
+      },
+    },
+    Object {
+      "genres": Array [
+        "Drama",
+      ],
+      "id": 1,
+      "image": Object {},
+      "name": "Show A",
+      "rating": Object {
+        "average": 8,
+      },
+    },
+  ],
+}
+`;
+
+exports[`useShowsStore fetchNextPage increments page correctly 2`] = `
+Object {
+  "Drama": 1,
+}
+`;
+
+exports[`useShowsStore fetches episodes for a show 1`] = `
+Object {
+  "1": Array [
+    Object {
+      "id": 1,
+      "name": "Episode 1",
+    },
+  ],
+}
+`;
+
+exports[`useShowsStore fetches shows by genre and updates state 1`] = `
+Object {
+  "Drama": Array [
+    Object {
+      "genres": Array [
+        "Drama",
+      ],
+      "id": 1,
+      "image": Object {},
+      "name": "Show A",
+      "rating": Object {
+        "average": 8,
+      },
+    },
+  ],
+}
+`;
+
+exports[`useShowsStore fetches shows by genre and updates state 2`] = `
+Object {
+  "Drama": 0,
+}
+`;
+
+exports[`useShowsStore fetches shows by name 1`] = `
+Array [
+  Object {
+    "id": 10,
+    "name": "Search Show",
+  },
+]
+`;
+
+exports[`useShowsStore handles empty search 1`] = `Array []`;
+
+exports[`useShowsStore handles fetch error 1`] = `"Network error"`;
+
+exports[`useShowsStore sorts and filters shows correctly 1`] = `
+Array [
+  Object {
+    "id": 3,
+    "image": Object {
+      "medium": "img.jpg",
+    },
+    "name": "Show C",
+    "rating": Object {
+      "average": 10,
+    },
+  },
+]
+`;
+
+exports[`useShowsStore sorts and filters shows correctly 2`] = `
+Array [
+  Object {
+    "id": 3,
+    "image": Object {
+      "medium": "img.jpg",
+    },
+    "name": "Show C",
+    "rating": Object {
+      "average": 10,
+    },
+  },
+  Object {
+    "id": 2,
+    "image": null,
+    "name": "Show B",
+    "rating": Object {
+      "average": 9,
+    },
+  },
+]
+`;
+
+exports[`useShowsStore toggles favorite correctly 1`] = `Array []`;

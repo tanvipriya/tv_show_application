@@ -1,6 +1,8 @@
-
 import { mount } from '@vue/test-utils';
 import ShowCard from '@/components/ShowCard.vue';
+
+
+
 
 describe('ShowCard.vue', () => {
     const showFullData = {
@@ -55,4 +57,17 @@ describe('ShowCard.vue', () => {
 
         expect(wrapper.find('img').exists()).toBe(false);
     });
+
+    // ✅ Snapshot Test
+    it('matches snapshot for full data', () => {
+        const wrapper = mount(ShowCard, {
+            props: { show: showFullData },
+        });
+
+        expect(wrapper.html()).toMatchSnapshot();
+    });
+
+
+
+
 });

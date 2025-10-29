@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`useShows composable with snapshots clears shows list: after clearing shows 1`] = `
+Object {
+  "shows": Array [],
+}
+`;
+
+exports[`useShows composable with snapshots fetches shows successfully: after successful fetch 1`] = `
+Object {
+  "error": null,
+  "loading": false,
+  "shows": Array [
+    Object {
+      "id": 1,
+      "name": "Breaking Bad",
+    },
+    Object {
+      "id": 2,
+      "name": "Friends",
+    },
+  ],
+}
+`;
+
+exports[`useShows composable with snapshots fetches shows successfully: loading state 1`] = `
+Object {
+  "error": null,
+  "loading": true,
+  "shows": Array [],
+}
+`;
+
+exports[`useShows composable with snapshots handles API errors correctly 1`] = `
+Object {
+  "error": "API Error Message",
+  "loading": false,
+  "shows": Array [],
+}
+`;
+
+exports[`useShows composable with snapshots handles unknown errors gracefully 1`] = `
+Object {
+  "error": "Network issue",
+}
+`;
+
+exports[`useShows composable with snapshots initializes with default values 1`] = `
+Object {
+  "error": null,
+  "loading": false,
+  "shows": Array [],
+}
+`;
