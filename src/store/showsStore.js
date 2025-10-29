@@ -98,16 +98,12 @@ export const useShowsStore = defineStore('shows', {
             this.filters = { ...this.filters, ...newFilters };
         },
 
-        sortedFilteredShows: (state) => (genre) => {
-            const shows = state.showsByGenre[genre] || [];
+        sortedFilteredShows(genre) {
+            const shows = this.showsByGenre[genre] || [];
             return [...shows]
-                .filter((show) => !state.filters.hasImage || show.image)
-                .filter((show) => !state.filters.minRating || (show.rating?.average || 0) >= state.filters.minRating)
-                .sort((a, b) => {
-                    const ratingA = a.rating?.average ?? -1;
-                    const ratingB = b.rating?.average ?? -1;
-                    return ratingB - ratingA;
-                });
+                .filter(show => !this.filters.hasImage || show.image)
+                .filter(show => !this.filters.minRating || (show.rating?.average ?? 0) >= this.filters.minRating)
+                .sort((a, b) => (b.rating?.average ?? -1) - (a.rating?.average ?? -1));
         },
 
         /* -----------------------------------

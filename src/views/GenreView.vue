@@ -1,5 +1,8 @@
 <template>
   <div class="genre-view">
+    <!-- Back Button -->
+    <button @click="goBack" class="back-btn">← Back to Dashboard</button>
+
     <h1>{{ genre }} Shows</h1>
 
     <div class="shows-grid" ref="scrollContainer">
@@ -20,18 +23,30 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useShowsStore } from "@/store/showsStore";
 import ShowCard from "@/components/ShowCard.vue";
 
 const route = useRoute();
+const router = useRouter();
 const genre = route.params.genre;
 
 const store = useShowsStore();
 const loading = computed(() => store.loading);
 const error = computed(() => store.error);
 
-const shows = computed(() => store.showsByGenre[genre] || []);
+// Navigate back
+function goBack() {
+  router.back();
+}
+
+// Compute shows for this genre, sorted by rating descending
+const shows = computed(() => {
+  const genreShows = store.showsByGenre[genre] || [];
+  return [...genreShows].sort(
+    (a, b) => (b.rating?.average || 0) - (a.rating?.average || 0)
+  );
+});
 
 // Infinite scroll logic
 const scrollContainer = ref(null);
@@ -89,5 +104,19 @@ h1 {
 .error {
   text-align: center;
   margin: 16px 0;
+}
+
+.back-btn {
+  margin-bottom: 16px;
+  padding: 6px 12px;
+  background-color: #1e90ff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.back-btn:hover {
+  background-color: #187bcd;
 }
 </style>
