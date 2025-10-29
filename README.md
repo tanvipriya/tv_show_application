@@ -261,6 +261,16 @@ https://github.com/user-attachments/assets/9bc6aaae-1353-4a77-a669-469ba4831107
 
 https://github.com/user-attachments/assets/99c8dd3e-a008-4b6a-8d5a-6a7f4429756d
 
+### Jest Unit Test Case
+
+<img width="915" height="579" alt="Screenshot 2025-10-29 at 11 06 33 PM" src="https://github.com/user-attachments/assets/5e8006d5-2fbb-45a5-8aa8-edd0b8c2bf35" />
+
+### Jest Unit Test Case Coverage
+
+<img width="1792" height="437" alt="Screenshot 2025-10-29 at 11 07 14 PM" src="https://github.com/user-attachments/assets/49807e82-f2a0-46e1-96cf-ccd8235dc803" />
+
+
+
 ---
 ##  Author
 
