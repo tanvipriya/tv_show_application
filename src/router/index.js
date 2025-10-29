@@ -1,21 +1,34 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
+// Lazy-loaded views
+const views = {
+    Home: () => import('../views/HomeView.vue'),
+    ShowDetail: () => import('../views/ShowDetailView.vue'),
+    SearchResults: () => import('../views/SearchResultsView.vue'),
+    Genre: () => import('../views/GenreView.vue')
+};
+
 const routes = [
     {
         path: '/',
         name: 'Home',
-        component: () => import('../views/HomeView.vue')
+        component: views.Home
     },
     {
         path: '/show/:id',
         name: 'ShowDetail',
-        component: () => import('../views/ShowDetailView.vue'),
+        component: views.ShowDetail,
         props: true
+    },
+    {
+        path: '/search',
+        name: 'SearchResults',
+        component: views.SearchResults
     },
     {
         path: '/genre/:genre',
         name: 'GenreView',
-        component: () => import('../views/GenreView.vue'),
+        component: views.Genre,
         props: true
     }
 ];

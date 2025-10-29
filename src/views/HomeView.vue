@@ -5,6 +5,7 @@
     <GenreCarousel genre="Comedy" />
     <GenreCarousel genre="Action" />
     <GenreCarousel genre="Sports" />
+    <GenreCarousel genre="Horror" />
   </div>
 </template>
 

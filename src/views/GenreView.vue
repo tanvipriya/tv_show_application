@@ -3,7 +3,14 @@
     <h1>{{ genre }} Shows</h1>
 
     <div class="shows-grid" ref="scrollContainer">
-      <ShowCard v-for="show in shows" :key="show.id" :show="show" />
+      <router-link
+        v-for="show in shows"
+        :key="show.id"
+        :to="{ name: 'ShowDetail', params: { id: show.id } }"
+        class="show-link"
+      >
+        <ShowCard :show="show" />
+      </router-link>
     </div>
 
     <p v-if="loading" class="loading">Loading...</p>
@@ -71,6 +78,11 @@ h1 {
   gap: 12px;
   max-height: 80vh; /* optional to make container scrollable */
   overflow-y: auto;
+}
+
+.show-link {
+  text-decoration: none;
+  color: inherit;
 }
 
 .loading,
