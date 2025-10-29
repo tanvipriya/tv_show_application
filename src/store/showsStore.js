@@ -3,17 +3,23 @@ import axios from 'axios';
 
 export const useShowsStore = defineStore('shows', {
     state: () => ({
-        showsByGenre: {},         // { genreName: [shows] }
-        pagesLoaded: {},          // { genreName: number of pages loaded }
+        showsByGenre: {},          // { genreName: [shows] }
+        pagesLoaded: {},           // { genreName: number of pages loaded }
+        searchResults: [],         // array of shows for search
         loading: false,
-        error: null
+        error: null,
+        filters: {
+            hasImage: false,
+            minRating: 0,
+        },
+        favorites: JSON.parse(localStorage.getItem('favorites') || '[]'),
+        episodesByShow: {},        // episodes for each show
     }),
+
     actions: {
-        /**
-         * Fetch shows by genre dynamically using API pages.
-         * @param {string} genre
-         * @param {number} page - TVMaze API page number
-         */
+        /* -----------------------------------
+         * Genre Fetching & Infinite Scroll
+         * ----------------------------------- */
         async fetchShowsByGenrePage(genre, page = 0) {
             this.loading = true;
             this.error = null;
@@ -25,7 +31,7 @@ export const useShowsStore = defineStore('shows', {
                 // Filter shows by genre
                 const filtered = shows.filter((show) => show.genres.includes(genre));
 
-                // Initialize array if not exists
+                // Initialize arrays if not exist
                 if (!this.showsByGenre[genre]) {
                     this.showsByGenre[genre] = [];
                     this.pagesLoaded[genre] = 0;
@@ -41,12 +47,80 @@ export const useShowsStore = defineStore('shows', {
             }
         },
 
-        /**
-         * Load next batch for infinite scroll.
-         */
         async fetchNextPage(genre) {
             const nextPage = this.pagesLoaded[genre] !== undefined ? this.pagesLoaded[genre] + 1 : 0;
             await this.fetchShowsByGenrePage(genre, nextPage);
-        }
-    }
+        },
+
+        /* -----------------------------------
+         * Favorites / Bookmark
+         * ----------------------------------- */
+        toggleFavorite(showId) {
+            if (this.favorites.includes(showId)) {
+                this.favorites = this.favorites.filter((id) => id !== showId);
+            } else {
+                this.favorites.push(showId);
+            }
+            localStorage.setItem('favorites', JSON.stringify(this.favorites));
+        },
+
+        isFavorite(showId) {
+            return this.favorites.includes(showId);
+        },
+
+        /* -----------------------------------
+         * Search Shows
+         * ----------------------------------- */
+        async fetchShowsByName(name) {
+            this.loading = true;
+            this.error = null;
+            this.searchResults = [];
+
+            if (!name) {
+                this.loading = false;
+                return;
+            }
+
+            try {
+                const res = await axios.get(`https://api.tvmaze.com/search/shows?q=${name}`);
+                this.searchResults = res.data.map((r) => r.show);
+            } catch (err) {
+                this.error = err.message || 'Failed to search shows';
+            } finally {
+                this.loading = false;
+            }
+        },
+
+        /* -----------------------------------
+         * Sorting & Filtering
+         * ----------------------------------- */
+        setFilters(newFilters) {
+            this.filters = { ...this.filters, ...newFilters };
+        },
+
+        sortedFilteredShows: (state) => (genre) => {
+            const shows = state.showsByGenre[genre] || [];
+            return [...shows]
+                .filter((show) => !state.filters.hasImage || show.image)
+                .filter((show) => !state.filters.minRating || (show.rating?.average || 0) >= state.filters.minRating)
+                .sort((a, b) => {
+                    const ratingA = a.rating?.average ?? -1;
+                    const ratingB = b.rating?.average ?? -1;
+                    return ratingB - ratingA;
+                });
+        },
+
+        /* -----------------------------------
+         * Episode Listing
+         * ----------------------------------- */
+        async fetchEpisodes(showId) {
+            if (this.episodesByShow[showId]) return;
+            try {
+                const res = await axios.get(`https://api.tvmaze.com/shows/${showId}/episodes`);
+                this.episodesByShow[showId] = res.data;
+            } catch (err) {
+                console.error(err);
+            }
+        },
+    },
 });
