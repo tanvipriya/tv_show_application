@@ -52,24 +52,36 @@ This app fetches TV shows by genre using the [TVMaze API](https://www.tvmaze.com
 ## State Management (Pinia)
 
 ### `showsStore.js`
-Manages all data related to shows, genres, and search.
+Manages all TV show-related data, including genres, search results, favorites, filtering, and episodes. Handles API calls, loading states, and errors in a centralized manner.
+
+---
+
+
+### `showsStore.js`
+Central store for all TV show data: genres, search, favorites, filtering, and episodes. Handles API calls, loading, and errors.
 
 **State:**
-- `showsByGenre`
-- `selectedShow`
-- `searchQuery`
-- `searchResults`
-- `loading` / `error`
+- `showsByGenre` – Shows grouped by genre.
+- `pagesLoaded` – Pages loaded per genre for infinite scroll.
+- `searchResults` – Results from search queries.
+- `loading` / `error` – API request status.
+- `filters` – `{ hasImage, minRating }`.
+- `favorites` – Favorite show IDs (stored in `localStorage`).
+- `episodesByShow` – Episodes per show.
 
 **Actions:**
-- `fetchShowsByGenre(genre)`
-- `fetchShowDetails(id)`
-- `searchShows(query)`
+- `fetchShowsByGenrePage(genre, page)` – Fetch & filter shows by genre.
+- `fetchNextPage(genre)` – Load next page for infinite scroll.
+- `fetchShowsByName(name)` – Search shows by name.
+- `fetchEpisodes(showId)` – Fetch episodes for a show.
+- `toggleFavorite(showId)` – Add/remove favorites.
+- `setFilters(filters)` – Update filters.
 
-**Getters:**
-- `getShowsByGenre`
-- `filteredShows`
-- `isLoading`
+
+| Getter | Description |
+|--------|-------------|
+| `sortedFilteredShows(genre)` | Returns shows for a genre filtered by `filters` and sorted by average rating descending. |
+| `isFavorite(showId)` | Returns `true` if the show ID exists in `favorites`. |
 
 ---
 
