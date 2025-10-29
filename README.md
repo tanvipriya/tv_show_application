@@ -243,7 +243,29 @@ npm run build-storybook
 5. Developers can preview individual components via **Storybook**.
 
 ---
+### Demo
 
+**Home View**
+
+
+
+https://github.com/user-attachments/assets/64937823-8f79-46cf-9732-7fc52923be96
+
+**ShowDetailView**
+
+
+https://github.com/user-attachments/assets/44563467-192d-4f51-be46-fb5355b3a733
+
+**SearchResultsView**
+
+
+https://github.com/user-attachments/assets/ff7375c9-c846-4aae-9158-b21bc15dd980
+
+
+
+
+
+---
 ##  Author
 
 **Tanvi Priya**  
